@@ -1,0 +1,45 @@
+extends layout
+ 
+block contenido
+  if usuario
+      h1 Bienvenido #{usuario.nombre} #{usuario.apellido}
+  else 
+    form(action="/login", method="post") 
+        label.col-sm-2.col-form-label(for='email') E-mail:
+        input.form-control(type="email", name="email",required)
+        label.col-sm-2.col-form-label(for='password') Contraseña:
+        input.form-control(type="password", name="contraseña",required)
+        br 
+        input.btn.btn-primary(type="submit", value="Iniciar Sesion")
+    br
+    div
+      | ¿eres nuevo?    
+      button.btn.btn-primary(type='button' data-bs-toggle='modal' data-bs-target='#modeloCli' aria-label="Mostrar") Registrate!!
+    #modeloCli.modal.fade(tabindex='-1' aria-labelledby='modeloCliLabel' aria-hidden='true')
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    h5#modeloCliLabel.modal-title Registrate!!!
+                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                .modal-body
+                  form(action="../registro", method="post")
+                    |  dni
+                    input.form-control(type="text", name="dni",required, value= registro ? `${registro.dni}`:"")
+                    |  nombre
+                    input.form-control(type="text", name="nombre",required,pattern="^[A-Z a-z]+$", value= registro ? `${registro.nombre}`:"")
+                    |  apellido 
+                    br
+                    input.form-control(type="text", name="apellido",required,pattern="^[A-Z a-z]+$", value= registro ? `${registro.apellido}`:"")
+                    |  e-mail
+                    br
+                    input.form-control(type="email", name="email",required , value= registro ? `${registro.email}`:"")
+                    |  telefono  
+                    br
+                    input.form-control(type="tel",placeholder="2664000000" name="tel",required,pattern="^[0-9]+$",value= registro ? `${registro.telefono}`:"")
+                    |  contraseña
+                    br
+                    input.form-control(type="password", name="contraseña",required, )
+                    |  fecha de nacimiento  
+                    input.form-control(type="date", name="fechaN",required,value= registro ? `${registro.fecha}`:"")
+                    br
+                    input.btn.btn-primary(type="submit", value="registrarse")

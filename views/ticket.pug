@@ -1,0 +1,23 @@
+extends layout
+ 
+block contenido
+
+    div 
+            table.table.table-dark
+                    thead
+                        tr
+                        th(scope='col') fecha de ingreso
+                        th(scope='col') estado                        
+                        th(scope='col') detalles
+                        th(scope='col') resolucion
+                        th(scope='col') area
+                        th(scope='col') fecha de salida
+                    tbody
+                        each val in historiales
+                            tr 
+                                th(scope='row')= val.fecha_ingreso.toLocaleString()
+                                td= val.estado
+                                td= val.detalle_razon
+                                td= val.detalle_solucion
+                                td= val.Area.nombre_area
+                                td= (val.fecha_egreso!=null? val.fecha_egreso.toLocaleString():val.fecha_egreso)

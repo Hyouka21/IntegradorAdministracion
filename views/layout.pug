@@ -1,0 +1,72 @@
+doctype html
+html
+  head
+    title= title
+    script(src="/javascripts/bootstrap.bundle.js") 
+    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+    script(src='https://code.jquery.com/jquery-3.2.1.js')
+    script(type='text/javascript').
+      $(document).ready(function() {
+      setTimeout(function() {
+      $(".mensajeAlerta").fadeOut(1500);
+      },3000);
+      });
+    link(rel='stylesheet', href='/stylesheets/style.css')
+      
+  body.bg-secondary
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.sticky-top
+      .container-fluid
+        a.navbar-brand(href='../../../') Help Desk
+        button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarScroll' aria-controls='navbarScroll' aria-expanded='false' aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        #navbarScroll.collapse.navbar-collapse
+          .navbar-nav.me-auto.my-2.my-lg-0.navbar-nav-scroll(style='--bs-scroll-height: 100px;')            
+            a.nav-link(href='../../../../') Inicio 
+            if empleado
+              a.nav-link(href='../../empleado') Solicitudes
+            if gestion
+              a.nav-link(href='../../empleado/gestion') Gestion
+            if cliente
+              a.nav-link(href='../../cliente') Solicitud 
+            if calidad
+              a.nav-link(href='../../empleado/notificaciones') Notificaciones   
+                if cantidadN>0
+                  span.badge.bg-danger #{cantidadN}
+          if (empleado || cliente)
+            #navbarNavDarkDropdown.collapse.navbar-collapse
+              ul.navbar-nav
+                li.nav-item.dropdown
+                  a#navbarDarkDropdownMenuLink.nav-link.dropdown-toggle(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')
+                    | Opciones
+                  ul.dropdown-menu.dropdown-menu-dark(aria-labelledby='navbarDarkDropdownMenuLink')
+                    li
+                      button.btn.btn-primary.dropdown-item(type='button' data-bs-toggle='modal' data-bs-target='#modeloCont' aria-label="Mostrar") Cambiar Contraseña                       
+                    li
+                      form(action="../../cerrar", method="post") 
+                        input.dropdown-item(type="submit", value="Cerrar Sesion")
+          form.d-flex(action="../../tickets", method="post")
+            input.form-control.me-2(type='text' placeholder='Ingrese el ticket' name="select" aria-label='Search')
+            button.btn.btn-secondary(type='submit') Buscar        
+    if mensaje
+      .alert.alert-success.alert-dismissible.fade.show.sticky-top(role='alert')
+          h4= mensaje
+          button.btn-close(type='button' data-bs-dismiss='alert' aria-label='Close')
+    if error
+      .alert.alert-warning.alert-dismissible.fade.show.sticky-top(role='alert')
+          h4= error
+          button.btn-close(type='button' data-bs-dismiss='alert' aria-label='Close')
+    #modeloCont.modal.fade(tabindex='-1' aria-labelledby='modeloContLabel' aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            h5#modeloContLabel.modal-title Registrate!!!
+            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+          .modal-body
+            form(action="../../cambiarContra", method="post")
+              |  Ingrese la contraseña actual
+              input.form-control(type="password", name="contraseñaV",required)
+              |  Ingrese la nueva contraseña
+              input.form-control(type="password", name="contraseñaN",required)
+              br
+              input.btn.btn-primary(type="submit", value="Cambiar Contraseña")
+    block contenido
