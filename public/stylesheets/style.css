@@ -1,0 +1,10 @@
+.notifi {
+    position: absolute;
+    border-radius: 1em;
+    text-shadow: 3px 1px rgba(0, 0, 0, .15);
+    width: 1.4em;
+    height: 1.4em;
+    text-align: center;
+    color: aliceblue;
+    background-color: red;
+}
