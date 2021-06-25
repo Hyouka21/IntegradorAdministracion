@@ -1,0 +1,39 @@
+extends ../layout
+
+block contenido 
+    div 
+        h4 Crear Solicitud 
+        form(action="../cliente/crear", method="post")
+            select.form-select( name="tipo")   
+                option(value="Reclamo") Reclamo
+                option(value="Compra") Compra
+                option(value="Incidente") Incidente  
+                option(value="Otros") Otros  
+            br
+            |Descripcion
+            br
+            textarea.form-control(rows='3',name="detalle",required)
+            input(type="submit", name="",value="enviar solicitud")
+    div 
+       h1 Solicitudes
+       table.table.table-dark
+        thead
+            tr
+            th(scope='col') ticket
+            th(scope='col') fecha
+            th(scope='col') detalle
+            th(scope='col') tipo
+            th(scope='col') seleccionar
+        tbody
+            each val in sol
+                tr 
+                    th(scope='row')= val.ticket
+                    td= val.fecha_solicitud.toLocaleString()
+                    td= val.detalle
+                    td= val.tipo
+                    td
+                        form(action="../../tickets", method="post") 
+                            input(type="hidden" name="select" value=`${val.ticket}` )
+                            input(type="submit" value="Mas Detalles")
+
+    
