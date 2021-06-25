@@ -1,0 +1,150 @@
+extends ../layout
+
+block contenido 
+
+    button.btn.btn-primary(type='button' data-bs-toggle='modal' data-bs-target='#modeloEmp' aria-label="Mostrar") Crear Empleados
+    #modeloEmp.modal.fade(tabindex='-1' aria-labelledby='modeloEmpLabel' aria-hidden='true')
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    h5#modeloEmpLabel.modal-title crear empleados
+                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                .modal-body
+                    form(action="../empleado/gestion/registrar", method="post")
+                        |  dni
+                        input.form-control(type="text", name="dni",required, value= registro ? `${registro.dni}`:"")
+                        |  nombre
+                        input.form-control(type="text", name="nombre",required,pattern="^[A-Z a-z]+$", value= registro ? `${registro.nombre}`:"")
+                        |  apellido 
+                        br
+                        input.form-control(type="text", name="apellido",pattern="^[A-Z a-z]+$",required, value= registro ? `${registro.apellido}`:"")
+                        |  e-mail
+                        br
+                        input.form-control(type="email", name="email",required, value= registro ? `${registro.email}`:"")
+                        |  telefono  
+                        br
+                        input.form-control(type="tel", name="tel",required,pattern="^[0-9]+$", value= registro ? `${registro.telefono}`:"")
+                        |  contraseña
+                        br
+                        input.form-control(type="password", name="contraseña",required)
+                        |   area de trabajo  
+                        br  
+                        select.form-select( name="area") 
+                                each val in areas 
+                                    if(registro)
+                                        if(val.id_area == registro.area)
+                                            option(value=val.id_area) #{val.nombre_area}
+                                        else 
+                                            option(value=val.id_area,selected) #{val.nombre_area}
+                                    else 
+                                        option(value=val.id_area) #{val.nombre_area}
+                        |  fecha de nacimiento  
+                        br
+                        input.form-control(type="date", name="fechaN",required, value= registro ? `${registro.fecha}`:"")
+                        
+                        br
+                        input.btn.btn-primary(type="submit", value="crear empleado")  
+    div 
+        h4 Gestionar empleados
+        table.table.table-dark
+                thead
+                    tr
+                    th(scope='col') dni
+                    th(scope='col') nombre
+                    th(scope='col') apellido
+                    th(scope='col') e-mail
+                    th(scope='col') celular
+                    th(scope='col') fecha
+                    th(scope='col') area
+                    th(scope='col') accion
+                tbody
+                    each val in empleados
+                        tr 
+                            th(scope='row')= val.dni
+                            td= val.nombre
+                            td= val.apellido
+                            td= val.mail
+                            td= val.telefono
+                            td=val.fecha.toLocaleString()
+                            td=val.Area.nombre_area
+                            td
+                                .btn-group
+                                    if(val.estado=="Activo")
+                                        
+                                            form(action="../../empleado/gestion/eliminar", method="post") 
+                                                input(type="hidden" name="select" value=`${val.dni}` )
+                                                input.btn.btn-primary(type="submit" value="Desactivar") 
+                                    else
+                                        form(action="../../empleado/gestion/activar", method="post") 
+                                            input(type="hidden" name="select" value=`${val.dni}` )
+                                            input.btn.btn-primary(type="submit" value="Activar")
+                                    form(action="../../empleado/gestion/modificar", method="post") 
+                                        input(type="hidden" name="select" value=`${val.dni}` )
+                                        input.btn.btn-primary(type="submit" value="Modificar")         
+    div 
+        h4 crear areas
+        form(action="../../empleado/gestion/crearArea", method="post")
+            input.form-control(type="text", name="nombre",required)
+            |  nombre del area
+            br
+            input.btn.btn-primary(type="submit", value="Crear Area")
+    div 
+        h4 gestion areas
+        table.table.table-dark
+                thead
+                    tr
+                    th(scope='col') nombre
+                    th(scope='col') accion
+                tbody
+                    each val in areas
+                        tr 
+                            td= val.nombre_area
+                            td
+                                .btn-group
+                                    form(action="../../empleado/gestion/eliminarArea", method="post") 
+                                        input(type="hidden" name="select" value=`${val.id_area}` )
+                                        input.btn.btn-primary(type="submit" value="Eliminar")     
+                                        button.btn.btn-primary(type='button' data-bs-toggle='modal' data-bs-target=`#modal${val.id_area}` aria-label="Mostrar") Modificar 
+                                    .modal.fade(tabindex='-1' aria-labelledby='modeloContLabel' id=`modal${val.id_area}` aria-hidden='true')
+                                        .modal-dialog
+                                            .modal-content
+                                                .modal-header
+                                                    h5#modeloContLabel.modal-title.text-dark Modificar Area
+                                                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                                .modal-body
+                                                    form(action="../../empleado/gestion/modificarArea", method="post") 
+                                                        input.form-control(type="text", name="nombre",required,value=`${val.nombre_area}`)
+                                                        br
+                                                        input(type="hidden" name="select" value=`${val.id_area}` )
+                                                        input.btn.btn-primary(type="submit" value="Modificar")                 
+    div 
+        h4 aceptar clientes
+        table.table.table-dark
+                thead
+                    tr
+                    th(scope='col') dni
+                    th(scope='col') nombre
+                    th(scope='col') apellido
+                    th(scope='col') e-mail
+                    th(scope='col') celular
+                    th(scope='col') fecha
+                    th(scope='col') accion
+                tbody
+                    each val in clientes
+                        tr 
+                            th(scope='row')= val.dni
+                            td= val.nombre
+                            td= val.apellido
+                            td= val.mail
+                            td= val.celular
+                            td=val.fecha.toLocaleString()
+                            td
+                                if(val.estado != "aceptado")
+                                    form(action="../../empleado/gestion/aceptarCliente", method="post") 
+                                        input(type="hidden" name="select" value=`${val.dni}` )
+                                        input.btn.btn-primary(type="submit" value="Activar")
+                                else
+                                    form(action="../../empleado/gestion/desactivarCliente", method="post") 
+                                        input(type="hidden" name="select" value=`${val.dni}` )
+                                        input.btn.btn-primary(type="submit" value="Desactivar")
+                            

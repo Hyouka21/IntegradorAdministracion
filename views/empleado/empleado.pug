@@ -1,0 +1,27 @@
+extends ../layout
+
+block contenido 
+  
+    table.table.table-dark
+        thead
+            tr
+            th(scope='col') ticket
+            th(scope='col') prioridad
+            th(scope='col') fecha
+            th(scope='col') detalle
+            th(scope='col') tipo
+            th(scope='col') dni cliente
+            th(scope='col') seleccionar
+        tbody
+            each val in his
+                tr 
+                    td= val.Solicitud.ticket
+                    td= val.Solicitud.prioridad
+                    td= val.Solicitud.fecha_solicitud.toLocaleString()
+                    td= val.Solicitud.detalle
+                    td= val.Solicitud.tipo
+                    td= val.Solicitud.dni_cliente
+                    td
+                        form(action="../empleado/resolver", method="post") 
+                            input(type="hidden" name="select" value=`${val.fecha_ingreso}/${val.id_area}/${val.id_solicitud}` )
+                            input.btn-primary(type="submit" value="resolver")

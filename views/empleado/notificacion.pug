@@ -1,0 +1,28 @@
+extends ../layout
+
+block contenido 
+
+    div 
+    table.table.table-dark
+        thead
+            tr
+            th(scope='col') problema
+            th(scope='col') ticket
+            th(scope='col') estado
+            th(scope='col') seleccionar
+        tbody
+            -let x=0
+             each valo in notificacion  
+                tr 
+                    td=valo.descripcion
+                    td=historial[x][0].Solicitud.ticket
+                    td=valo.estado
+                    td
+                        .btn-group
+                            form.d-flex(action="../../tickets", method="post")
+                                input(type='hidden' name="select" value=`${historial[x][0].Solicitud.ticket}`)
+                                input.btn.btn-secondary(type='submit' value="Detalles")
+                            form.d-flex(action="../../empleado/notificaciones/visto", method="post")
+                                input(type='hidden' name="select" value=`${valo.id_notificacion}`)
+                                input.btn.btn-secondary(type='submit' value="Marcar como visto")
+                - x=x+1

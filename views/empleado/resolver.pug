@@ -1,0 +1,73 @@
+extends ../layout
+
+block contenido 
+    div 
+        table.table.table-dark
+                thead
+                    tr
+                    th(scope='col') fecha de ingreso
+                    th(scope='col') estado
+                    th(scope='col') detalles
+                    th(scope='col') resolucion
+                    th(scope='col') area
+                    th(scope='col') solicitud
+                    th(scope='col') empleado
+                    th(scope='col') fecha de salida
+                tbody
+                    each val in historiales
+                        tr 
+                            th(scope='row')= val.fecha_ingreso.toLocaleString()
+                            td= val.estado
+                            td= val.detalle_razon
+                            td= val.detalle_solucion
+                            td= val.Area.nombre_area
+                            td=val.id_solicitud
+                            td= val.dni_empleado
+                            td= (val.fecha_egreso!=null? val.fecha_egreso.toLocaleString():val.fecha_egreso)
+    div 
+        table.table.table-dark
+            thead
+                tr
+                th(scope='col') ticket
+                th(scope='col') prioridad
+                th(scope='col') fecha
+                th(scope='col') detalle
+                th(scope='col') tipo
+                th(scope='col') dni cliente
+            tbody
+                each val in his
+                    tr 
+                        td= val.Solicitud.ticket
+                        td= val.Solicitud.prioridad
+                        td= val.Solicitud.fecha_solicitud.toLocaleString()
+                        td= val.Solicitud.detalle
+                        td= val.Solicitud.tipo
+                        td= val.Solicitud.dni_cliente
+    div 
+            h1 resolver 
+            form(action="../empleado/resolver/solucionar", method="post") 
+                label.form-label(for='resolucion') Detalles de la solucion
+                textarea#resolucion.form-control(rows='3',name="resolucion",required)
+                each val in his
+                    input(type="hidden" name="select" value=`${val.fecha_ingreso}/${val.id_area}/${val.id_solicitud}` )
+                br
+                input.btn.btn-primary(type="submit", value="resolver")
+    div 
+            h1 transferir
+            form(action="../empleado/resolver/transferir", method="post") 
+                label.form-label(for='motivo') Motivo de transferencia
+                textarea#motivo.form-control(rows='3',name="motivo",required)
+                label.form-label(for='areas') Elija el area donde lo va transferir
+                select#areas.form-select.form-select-lg.mb-3( name="area") 
+                    each val in areas 
+                        option(value=val.id_area) #{val.nombre_area} 
+                each val in his
+                    input(type="hidden" name="select" value=`${val.fecha_ingreso}/${val.id_area}/${val.id_solicitud}` )
+                if his[0].id_area==1
+                    label.form-label(for='priori') Elija la prioridad de la solicitud
+                    select#priori.form-select.form-select-lg.mb-3( name="prioridad")  
+                        option(value="Alta") Alta
+                        option(value="Media") Media
+                        option(value="Baja") Baja
+            
+                input.btn.btn-primary(type="submit", value="tranferir")

@@ -1,0 +1,39 @@
+extends ../layout
+
+block contenido 
+    div 
+        h4 modificar empleados
+        form(action="../../empleado/gestion/modificar/update", method="post")
+            |  dni
+            input.form-control(type="text", name="dni",value=`${empleados.dni}`,readonly,required)
+            
+            |  nombre
+            input.form-control(type="text", name="nombre",value=`${empleados.nombre}`,required)
+            
+            
+            |  apellido
+            input.form-control(type="text", name="apellido", value=`${empleados.apellido}`,required)
+             
+            
+            |  e-mail 
+            input.form-control(type="email", name="email", value=`${empleados.mail}`,required)
+            
+            
+            |  telefono 
+            input.form-control(type="tel", name="tel", value=`${empleados.telefono}`,required)
+            
+             
+            |   area de trabajo
+            select.form-select( name="area") 
+                    each val in areas 
+                        if(val.id_area == empleados.id_area)
+                            option(value=val.id_area,selected) #{val.nombre_area} 
+                        else 
+                            option(value=val.id_area) #{val.nombre_area}     
+              
+            
+            |  fecha de nacimiento
+            input.form-control(type="date", name="fechaN",value=`${fecha}`,required)
+            
+            br
+            input.btn.btn-primary(type="submit", value="Modificar Empleado")
